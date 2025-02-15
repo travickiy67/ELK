@@ -39,7 +39,7 @@
 
 *Приведите скриншот команды 'curl -X GET 'localhost:9200/_cluster/health?pretty', сделанной на сервере с установленным Elasticsearch. Где будет виден нестандартный cluster_name*.
 
-#### Пришлось некоторое время повозится с установкеой. ошибка: запрет установки в нашей стране.Удалось установить по это схеме.
+#### Пришлось некоторое время повозится с установкеой. ошибка: запрет установки в нашей стране. Удалось установить по этой схеме.
 
 ```
 sudo install -d -m 0755 /etc/apt/keyrings
@@ -48,6 +48,8 @@ echo "deb [trusted=yes] https://mirror.yandex.ru/mirrors/elastic/7/ stable main"
 sudo apt update
 sudo apt install elasticsearch
 ```
+*Скрин*  
+![image](https://github.com/travickiy67/ELK/blob/main/img/img1.1.png)  
 
 ---
 
@@ -57,6 +59,15 @@ sudo apt install elasticsearch
 
 *Приведите скриншот интерфейса Kibana на странице http://<ip вашего сервера>:5601/app/dev_tools#/console, где будет выполнен запрос GET /_cluster/health?pretty*.
 
+#### Kibana проще поставилась.
+
+*Скрин 1*  
+
+![image](https://github.com/travickiy67/ELK/blob/main/img/img2.1.png)  
+
+*Скрин 2*  
+
+![image](https://github.com/travickiy67/ELK/blob/main/img/img2.2.png)
 ---
 
 ### Задание 3. Logstash
@@ -64,6 +75,18 @@ sudo apt install elasticsearch
 Установите и запустите Logstash и Nginx. С помощью Logstash отправьте access-лог Nginx в Elasticsearch. 
 
 *Приведите скриншот интерфейса Kibana, на котором видны логи Nginx.*
+
+*Скрин 1*  
+
+![image](https://github.com/travickiy67/ELK/blob/main/img/img3.1.png)  
+
+*Скрин 2*  
+
+![image](https://github.com/travickiy67/ELK/blob/main/img/img3.2.png)  
+
+*Скрин 3*  
+
+![image](https://github.com/travickiy67/ELK/blob/main/img/img3.3.png)  
 
 ---
 
