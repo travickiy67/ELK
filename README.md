@@ -88,6 +88,38 @@ sudo apt install elasticsearch
 
 ![image](https://github.com/travickiy67/ELK/blob/main/img/img3.3.png)  
 
+*Скрин 4*  
+
+![image](https://github.com/travickiy67/ELK/blob/main/img/img3.4.png)  
+
+*Скрин 5*  
+
+![image](https://github.com/travickiy67/ELK/blob/main/img/img3.5.png)  
+
+*Конфигурация*
+```
+input {
+file {
+path => "/var/log/nginx/access.log"
+start_position => "beginning"
+  }
+}
+
+filter {
+    grok {
+        match => { "message" => "%{IPORHOST:remote_ip} - %{DATA:user} \[%{HTTPDATE:access_time}\] \"%{WORD:http_method} %{DATA:url} HTTP/%{NUMBER:http_version}\" %{NUMBER:response_code} %{NUMBER:body_sent_bytes} \"%{DATA:referrer}\" \"%{DATA:agent}\"" }
+
+  }
+
+}
+output {
+elasticsearch {
+hosts => "localhost"
+index => "travitskii-logs-%{+YYYY.MM}"
+ }
+}
+```
+ 
 ---
 
 ### Задание 4. Filebeat. 
@@ -95,8 +127,69 @@ sudo apt install elasticsearch
 Установите и запустите Filebeat. Переключите поставку логов Nginx с Logstash на Filebeat. 
 
 *Приведите скриншот интерфейса Kibana, на котором видны логи Nginx, которые были отправлены через Filebeat.*
+*Скрин 1*  
+
+![image](https://github.com/travickiy67/ELK/blob/main/img/img4.1.png)  
+
+*Скрин 2*  
+
+![image](https://github.com/travickiy67/ELK/blob/main/img/img4.2.png)  
+
+*Скрин 3*  
+
+![image](https://github.com/travickiy67/ELK/blob/main/img/img4.3.png)  
+
+*Скрин 4*  
+
+![image](https://github.com/travickiy67/ELK/blob/main/img/img4.4.png)  
+
+*Конфигурация*
+
+```
+input {
+beats {
+port => 5044
+}
+}
+
+filter {
+ if [event][dataset] == "nginx.access" {
+   grok {
+    match => { "message" => "%{IPORHOST:remote_ip} - %{DATA:user} \[%{HTTPDATE:access_time}\] \"%{WORD:http_method} %{DATA:url} HTTP/%{NUMBER:http_version}\" %{NUMBER:response_code} %{NUMBER:body_seody_sent_bytes} \"%{DATA:referrer}\" \"%{DATA:agent}\"" }
 
 
+    overwrite => [ "message" ]
+  }
+   mutate {
+    convert => ["response", "integer"]
+    convert => ["bytes", "integer"]
+    convert => ["responsetime", "float"]
+   }
+  geoip {
+   source => "clientip"
+   target => "geoip"
+   add_tag => [ "nginx-geoip" ]
+  }
+  date {
+   match => [ "timestamp" , "dd/MMM/YYYY:HH:mm:ss Z" ]
+   remove_field => [ "timestamp" ]
+  }
+
+ # useragent {
+ #  source => "user_agent"
+ # }
+ }
+}
+
+output {
+elasticsearch {
+hosts => [ "localhost:9200" ]
+#        manage_template => false
+        index => "nginx-%{+YYYY.MM.dd}"
+    }
+}
+
+```
 ## Дополнительные задания (со звёздочкой*)
 Эти задания дополнительные, то есть не обязательные к выполнению, и никак не повлияют на получение вами зачёта по этому домашнему заданию. Вы можете их выполнить, если хотите глубже шире разобраться в материале.
 
@@ -105,5 +198,5 @@ sudo apt install elasticsearch
 Настройте поставку лога в Elasticsearch через Logstash и Filebeat любого другого сервиса , но не Nginx. 
 Для этого лог должен писаться на файловую систему, Logstash должен корректно его распарсить и разложить на поля. 
 
-*Приведите скриншот интерфейса Kibana, на котором будет виден этот лог и напишите лог какого приложения отправляется.*O
+*Приведите скриншот интерфейса Kibana, на котором будет виден этот лог и напишите лог какого приложения отправляется.*
 
