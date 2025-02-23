@@ -51,6 +51,9 @@ sudo apt install elasticsearch
 *Скрин*  
 ![image](https://github.com/travickiy67/ELK/blob/main/img/img1.1.png)  
 
+*Скрин*  
+
+![image](https://github.com/travickiy67/ELK/blob/main/img/img1.2.png)  
 ---
 
 ### Задание 2. Kibana
